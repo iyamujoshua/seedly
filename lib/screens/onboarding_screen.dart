@@ -86,6 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: Text(
                           'Skip',
                           style: TextStyle(
+                            fontFamily: 'Geist',
                             color: _pages[_currentPage].color,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -317,6 +318,7 @@ class _OnboardingPageState extends State<OnboardingPage>
             widget.data.title,
             textAlign: TextAlign.center,
             style: const TextStyle(
+              fontFamily: 'Geist',
               fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Color(0xFF1A1A1A),
@@ -331,6 +333,7 @@ class _OnboardingPageState extends State<OnboardingPage>
             widget.data.description,
             textAlign: TextAlign.center,
             style: TextStyle(
+              fontFamily: 'Geist',
               fontSize: 16,
               color: Colors.grey.shade600,
               height: 1.5,

@@ -112,6 +112,7 @@ class _SplashScreenState extends State<SplashScreen>
                 const Text(
                   'Seedly',
                   style: TextStyle(
+                    fontFamily: 'Geist',
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -130,6 +131,7 @@ class _SplashScreenState extends State<SplashScreen>
                 Text(
                   'Your secrets, safely stored.',
                   style: TextStyle(
+                    fontFamily: 'Geist',
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: Colors.white.withAlpha(200),

@@ -56,6 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const Text(
                 'Login to your\naccount',
                 style: TextStyle(
+                  fontFamily: 'Geist',
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1A1A1A),
@@ -68,7 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
               // Email field
               Text(
                 'Your number & email address',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
               ),
               const SizedBox(height: 12),
               _buildTextField(
@@ -81,7 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
               // Password field
               Text(
                 'Enter your password',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
               ),
               const SizedBox(height: 12),
               _buildTextField(
@@ -125,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Remember me',
                         style: TextStyle(
+                          fontFamily: 'Geist',
                           fontSize: 14,
                           color: Colors.grey.shade600,
                         ),
@@ -137,7 +147,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text(
                       'Forget password',
-                      style: TextStyle(fontSize: 14, color: _brandColor),
+                      style: TextStyle(
+                        fontFamily: 'Geist',
+                        fontSize: 14,
+                        color: _brandColor,
+                      ),
                     ),
                   ),
                 ],
@@ -161,6 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'Or',
                       style: TextStyle(
+                        fontFamily: 'Geist',
                         fontSize: 14,
                         color: Colors.grey.shade500,
                       ),
@@ -190,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       "Don't have an account? ",
                       style: TextStyle(
+                        fontFamily: 'Geist',
                         fontSize: 14,
                         color: Colors.grey.shade600,
                       ),
@@ -199,6 +215,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text(
                         'Create an account',
                         style: TextStyle(
+                          fontFamily: 'Geist',
                           fontSize: 14,
                           color: _brandColor,
                           fontWeight: FontWeight.w600,
@@ -232,10 +249,18 @@ class _LoginScreenState extends State<LoginScreen> {
       child: TextField(
         controller: controller,
         obscureText: isPassword && obscureText,
-        style: const TextStyle(color: Color(0xFF1A1A1A), fontSize: 16),
+        style: const TextStyle(
+          fontFamily: 'Geist',
+          color: Color(0xFF1A1A1A),
+          fontSize: 16,
+        ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 16),
+          hintStyle: TextStyle(
+            fontFamily: 'Geist',
+            color: Colors.grey.shade400,
+            fontSize: 16,
+          ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -273,7 +298,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         child: Text(
           text,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontFamily: 'Geist',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -307,6 +336,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               text,
               style: const TextStyle(
+                fontFamily: 'Geist',
                 fontSize: 16,
                 color: Color(0xFF1A1A1A),
                 fontWeight: FontWeight.w500,

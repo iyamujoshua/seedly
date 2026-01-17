@@ -59,6 +59,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const Text(
                 'Create your\naccount',
                 style: TextStyle(
+                  fontFamily: 'Geist',
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1A1A1A),
@@ -71,7 +72,11 @@ class _SignupScreenState extends State<SignupScreen> {
               // Email field
               Text(
                 'Your number & email address',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
               ),
               const SizedBox(height: 12),
               _buildTextField(
@@ -84,7 +89,11 @@ class _SignupScreenState extends State<SignupScreen> {
               // Password field
               Text(
                 'Enter your password',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
               ),
               const SizedBox(height: 12),
               _buildTextField(
@@ -104,7 +113,11 @@ class _SignupScreenState extends State<SignupScreen> {
               // Confirm Password field
               Text(
                 'Confirm your password',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
               ),
               const SizedBox(height: 12),
               _buildTextField(
@@ -144,7 +157,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(width: 8),
                   Text(
                     'Remember me',
-                    style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                    style: TextStyle(
+                      fontFamily: 'Geist',
+                      fontSize: 14,
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                 ],
               ),
@@ -167,6 +184,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: Text(
                       'Or',
                       style: TextStyle(
+                        fontFamily: 'Geist',
                         fontSize: 14,
                         color: Colors.grey.shade500,
                       ),
@@ -196,6 +214,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     Text(
                       'Already have an account? ',
                       style: TextStyle(
+                        fontFamily: 'Geist',
                         fontSize: 14,
                         color: Colors.grey.shade600,
                       ),
@@ -205,6 +224,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: const Text(
                         'Login',
                         style: TextStyle(
+                          fontFamily: 'Geist',
                           fontSize: 14,
                           color: _brandColor,
                           fontWeight: FontWeight.w600,
@@ -238,10 +258,18 @@ class _SignupScreenState extends State<SignupScreen> {
       child: TextField(
         controller: controller,
         obscureText: isPassword && obscureText,
-        style: const TextStyle(color: Color(0xFF1A1A1A), fontSize: 16),
+        style: const TextStyle(
+          fontFamily: 'Geist',
+          color: Color(0xFF1A1A1A),
+          fontSize: 16,
+        ),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 16),
+          hintStyle: TextStyle(
+            fontFamily: 'Geist',
+            color: Colors.grey.shade400,
+            fontSize: 16,
+          ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
@@ -279,7 +307,11 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
         child: Text(
           text,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: const TextStyle(
+            fontFamily: 'Geist',
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -313,6 +345,7 @@ class _SignupScreenState extends State<SignupScreen> {
             Text(
               text,
               style: const TextStyle(
+                fontFamily: 'Geist',
                 fontSize: 16,
                 color: Color(0xFF1A1A1A),
                 fontWeight: FontWeight.w500,

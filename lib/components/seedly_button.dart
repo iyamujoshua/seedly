@@ -172,6 +172,7 @@ class _SeedlyButtonState extends State<SeedlyButton>
                           Text(
                             widget.label,
                             style: TextStyle(
+                              fontFamily: 'Geist',
                               fontSize: dimensions.fontSize,
                               fontWeight: FontWeight.w600,
                               color: _isEnabled

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:seedly/providers/auth_provider.dart';
 import 'package:seedly/screens/splash_screen.dart';
 
 void main() {
@@ -10,14 +12,37 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Seedly',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 172, 71, 4)),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (_) => AuthProvider(),
+      child: MaterialApp(
+        title: 'Seedly',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 172, 71, 4),
+          ),
+          useMaterial3: true,
+          fontFamily: 'Geist',
+          textTheme: const TextTheme(
+            displayLarge: TextStyle(fontFamily: 'Geist'),
+            displayMedium: TextStyle(fontFamily: 'Geist'),
+            displaySmall: TextStyle(fontFamily: 'Geist'),
+            headlineLarge: TextStyle(fontFamily: 'Geist'),
+            headlineMedium: TextStyle(fontFamily: 'Geist'),
+            headlineSmall: TextStyle(fontFamily: 'Geist'),
+            titleLarge: TextStyle(fontFamily: 'Geist'),
+            titleMedium: TextStyle(fontFamily: 'Geist'),
+            titleSmall: TextStyle(fontFamily: 'Geist'),
+            bodyLarge: TextStyle(fontFamily: 'Geist'),
+            bodyMedium: TextStyle(fontFamily: 'Geist'),
+            bodySmall: TextStyle(fontFamily: 'Geist'),
+            labelLarge: TextStyle(fontFamily: 'Geist'),
+            labelMedium: TextStyle(fontFamily: 'Geist'),
+            labelSmall: TextStyle(fontFamily: 'Geist'),
+          ),
+        ),
+        home: const SplashScreen(),
       ),
-      home: const SplashScreen(),
     );
   }
 }

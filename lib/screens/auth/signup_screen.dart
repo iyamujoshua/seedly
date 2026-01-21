@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:seedly/components/google_logo.dart';
+import 'package:seedly/components/back_button.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -53,7 +54,12 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60),
+              const SizedBox(height: 16),
+
+              // Back button
+              const UniversalBackButton(),
+
+              const SizedBox(height: 24),
 
               // Title
               const Text(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:seedly/components/google_logo.dart';
 import 'package:seedly/components/back_button.dart';
+import 'package:seedly/components/seedly_button.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -18,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberMe = false;
 
   // Brand color
-  static const Color _brandColor = Color.fromARGB(255, 172, 71, 4);
+  static const Color _brandColor = Color(0xFF685AFF);
 
   @override
   void dispose() {
@@ -172,7 +173,13 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
 
               // Login button
-              _buildButton(text: 'Log in', onPressed: _handleLogin),
+              SeedlyButton(
+                label: 'Log in',
+                onPressed: _handleLogin,
+                size: SeedlyButtonSize.large,
+                isFullWidth: true,
+                borderRadius: 28,
+              ),
 
               const SizedBox(height: 32),
 

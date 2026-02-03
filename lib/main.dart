@@ -18,9 +18,7 @@ class MyApp extends StatelessWidget {
         title: 'Seedly',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 172, 71, 4),
-          ),
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF685AFF)),
           useMaterial3: true,
           fontFamily: 'Geist',
           textTheme: const TextTheme(

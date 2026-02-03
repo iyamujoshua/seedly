@@ -20,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Save Everything\nin One Place',
       description:
           'Keep all your important files, notes, and memories organized and easily accessible.',
-      color: const Color.fromARGB(255, 172, 71, 4),
+      color: const Color(0xFF685AFF),
     ),
     OnboardingData(
       icon: Icons.cloud_done_rounded,
@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Access Anywhere,\nAnytime',
       description:
           'Your data is securely synced across all your devices. Never lose anything again.',
-      color: const Color.fromARGB(255, 172, 71, 4),
+      color: const Color(0xFF685AFF),
     ),
     OnboardingData(
       icon: Icons.lock_rounded,
@@ -36,7 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Private &\nSecure',
       description:
           'Your data is encrypted and protected. Only you have access to your saved content.',
-      color: const Color.fromARGB(255, 172, 71, 4),
+      color: const Color(0xFF685AFF),
     ),
   ];
 

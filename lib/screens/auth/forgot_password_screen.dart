@@ -13,7 +13,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
 
   // Brand color
-  static const Color _brandColor = Color.fromARGB(255, 172, 71, 4);
+  static const Color _brandColor = Color(0xFF685AFF);
 
   @override
   void dispose() {

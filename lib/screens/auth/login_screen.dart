@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:seedly/components/google_logo.dart';
 import 'package:seedly/components/back_button.dart';
 import 'package:seedly/components/seedly_button.dart';
+import 'package:seedly/providers/auth_provider.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -28,12 +30,47 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    // TODO: Implement login logic
+  void _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter email and password')),
+      );
+      return;
+    }
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.signIn(email: email, password: password);
+
+    if (mounted) {
+      if (success) {
+        // Navigate to home screen (will be created later)
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(authProvider.errorMessage ?? 'Login failed')),
+        );
+      }
+    }
   }
 
-  void _handleGoogleSignIn() {
-    // TODO: Implement Google sign in
+  void _handleGoogleSignIn() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.signInWithGoogle();
+
+    if (mounted) {
+      if (success) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(authProvider.errorMessage ?? 'Google sign-in failed'),
+          ),
+        );
+      }
+    }
   }
 
   void _navigateToSignup() {
@@ -296,32 +333,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 )
               : null,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton({required String text, required VoidCallback onPressed}) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _brandColor,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontFamily: 'Geist',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
         ),
       ),
     );

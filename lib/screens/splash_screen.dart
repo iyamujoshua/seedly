@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:seedly/providers/auth_provider.dart';
 import 'package:seedly/screens/onboarding_screen.dart';
+import 'package:seedly/screens/home/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -41,16 +44,22 @@ class _SplashScreenState extends State<SplashScreen>
     // Start animation
     _animationController.forward();
 
-    // Navigate to onboarding after delay
-    _navigateToOnboarding();
+    // Navigate after delay
+    _navigateNext();
   }
 
-  Future<void> _navigateToOnboarding() async {
+  Future<void> _navigateNext() async {
     await Future.delayed(const Duration(seconds: 3));
     if (mounted) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        MaterialPageRoute(
+          builder: (context) => authProvider.isAuthenticated
+              ? const HomeScreen()
+              : const OnboardingScreen(),
+        ),
       );
     }
   }
@@ -110,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen>
                 const SizedBox(height: 32),
                 // App title
                 const Text(
-                  'Seedly',
+                  'Secretly',
                   style: TextStyle(
                     fontFamily: 'Geist',
                     fontSize: 48,

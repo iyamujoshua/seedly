@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:seedly/components/google_logo.dart';
 import 'package:seedly/components/back_button.dart';
+import 'package:seedly/components/seedly_button.dart';
+import 'package:seedly/providers/auth_provider.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -29,12 +32,61 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void _handleSignup() {
-    // TODO: Implement signup logic
+  void _handleSignup() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final confirmPassword = _confirmPasswordController.text;
+
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Passwords do not match')));
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password must be at least 6 characters')),
+      );
+      return;
+    }
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.signUp(email: email, password: password);
+
+    if (mounted) {
+      if (success) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(authProvider.errorMessage ?? 'Signup failed')),
+        );
+      }
+    }
   }
 
-  void _handleGoogleSignIn() {
-    // TODO: Implement Google sign in
+  void _handleGoogleSignIn() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final success = await authProvider.signInWithGoogle();
+
+    if (mounted) {
+      if (success) {
+        Navigator.of(context).popUntil((route) => route.isFirst);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(authProvider.errorMessage ?? 'Google sign-in failed'),
+          ),
+        );
+      }
+    }
   }
 
   void _navigateToLogin() {
@@ -154,7 +206,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         });
                       },
                       activeColor: _brandColor,
-                      side: BorderSide(color: Colors.grey.shade400),
+                      // side: BorderSide(color: Colors.grey.shade400),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       ),
@@ -175,7 +227,13 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 24),
 
               // Sign up button
-              _buildButton(text: 'Sign up', onPressed: _handleSignup),
+              SeedlyButton(
+                label: 'Sign up',
+                onPressed: _handleSignup,
+                size: SeedlyButtonSize.large,
+                isFullWidth: true,
+                borderRadius: 28,
+              ),
 
               const SizedBox(height: 32),
 
@@ -292,32 +350,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                 )
               : null,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildButton({required String text, required VoidCallback onPressed}) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _brandColor,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontFamily: 'Geist',
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
         ),
       ),
     );

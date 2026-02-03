@@ -1,17 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:seedly/services/auth_service.dart';
 
 /// Authentication state provider for managing user authentication
 class AuthProvider with ChangeNotifier {
-  bool _isAuthenticated = false;
+  final AuthService _authService = AuthService();
+
   bool _isLoading = false;
-  String? _email;
   String? _errorMessage;
 
   // Getters
-  bool get isAuthenticated => _isAuthenticated;
+  bool get isAuthenticated => _authService.isSignedIn;
   bool get isLoading => _isLoading;
-  String? get email => _email;
+  User? get currentUser => _authService.currentUser;
+  String? get email => currentUser?.email;
   String? get errorMessage => _errorMessage;
+  Stream<User?> get authStateChanges => _authService.authStateChanges;
 
   /// Sign in with email and password
   Future<bool> signIn({required String email, required String password}) async {
@@ -19,16 +23,15 @@ class AuthProvider with ChangeNotifier {
     _clearError();
 
     try {
-      // TODO: Implement actual authentication logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-      // Simulated success - replace with real auth
-      _email = email;
-      _isAuthenticated = true;
+      await _authService.signInWithEmail(email: email, password: password);
       _setLoading(false);
       return true;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = _getErrorMessage(e.code);
+      _setLoading(false);
+      return false;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = 'An unexpected error occurred. Please try again.';
       _setLoading(false);
       return false;
     }
@@ -40,16 +43,15 @@ class AuthProvider with ChangeNotifier {
     _clearError();
 
     try {
-      // TODO: Implement actual sign up logic
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-      // Simulated success - replace with real auth
-      _email = email;
-      _isAuthenticated = true;
+      await _authService.signUpWithEmail(email: email, password: password);
       _setLoading(false);
       return true;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = _getErrorMessage(e.code);
+      _setLoading(false);
+      return false;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = 'An unexpected error occurred. Please try again.';
       _setLoading(false);
       return false;
     }
@@ -61,14 +63,35 @@ class AuthProvider with ChangeNotifier {
     _clearError();
 
     try {
-      // TODO: Implement Google sign-in
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
+      final result = await _authService.signInWithGoogle();
+      _setLoading(false);
+      return result != null;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = _getErrorMessage(e.code);
+      _setLoading(false);
+      return false;
+    } catch (e) {
+      _errorMessage = 'Google sign-in failed. Please try again.';
+      _setLoading(false);
+      return false;
+    }
+  }
 
-      _isAuthenticated = true;
+  /// Send password reset email
+  Future<bool> resetPassword(String email) async {
+    _setLoading(true);
+    _clearError();
+
+    try {
+      await _authService.sendPasswordResetEmail(email);
       _setLoading(false);
       return true;
+    } on FirebaseAuthException catch (e) {
+      _errorMessage = _getErrorMessage(e.code);
+      _setLoading(false);
+      return false;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = 'Failed to send reset email. Please try again.';
       _setLoading(false);
       return false;
     }
@@ -79,14 +102,10 @@ class AuthProvider with ChangeNotifier {
     _setLoading(true);
 
     try {
-      // TODO: Implement actual sign out logic
-      await Future.delayed(const Duration(milliseconds: 500));
-
-      _email = null;
-      _isAuthenticated = false;
+      await _authService.signOut();
       _setLoading(false);
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = 'Failed to sign out. Please try again.';
       _setLoading(false);
     }
   }
@@ -103,5 +122,31 @@ class AuthProvider with ChangeNotifier {
   void clearError() {
     _clearError();
     notifyListeners();
+  }
+
+  /// Convert Firebase error codes to user-friendly messages
+  String _getErrorMessage(String code) {
+    switch (code) {
+      case 'user-not-found':
+        return 'No account found with this email.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'email-already-in-use':
+        return 'An account already exists with this email.';
+      case 'weak-password':
+        return 'Password is too weak. Use at least 6 characters.';
+      case 'invalid-email':
+        return 'Please enter a valid email address.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'operation-not-allowed':
+        return 'This sign-in method is not enabled.';
+      case 'invalid-credential':
+        return 'Invalid credentials. Please try again.';
+      default:
+        return 'An error occurred. Please try again.';
+    }
   }
 }

@@ -12,18 +12,41 @@ class SecretsListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final displayName = authProvider.currentUser?.displayName;
+    final email = authProvider.currentUser?.email;
+    final userName = displayName?.isNotEmpty == true
+        ? displayName
+        : email?.split('@').first ?? 'User';
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'My Secrets',
-          style: TextStyle(
-            fontFamily: 'Geist',
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1A1A1A),
-          ),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome, $userName',
+              style: const TextStyle(
+                fontFamily: 'Geist',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Color(0xFF1A1A1A),
+              ),
+            ),
+            const SizedBox(height: 2),
+            const Text(
+              'My Secrets',
+              style: TextStyle(
+                fontFamily: 'Geist',
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+                color: Color(0xFF685AFF),
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -105,12 +128,16 @@ class _SecretCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SecretDetailScreen(secret: secret),
-          ),
-        );
+        if (secret.isPasswordProtected) {
+          _showPasswordDialog(context);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SecretDetailScreen(secret: secret),
+            ),
+          );
+        }
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
@@ -158,6 +185,15 @@ class _SecretCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
+                      if (secret.isPasswordProtected)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Icon(
+                            Icons.lock,
+                            size: 18,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                       Expanded(
                         child: Text(
                           secret.title,
@@ -225,5 +261,98 @@ class _SecretCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showPasswordDialog(BuildContext context) {
+    final passwordController = TextEditingController();
+    bool obscurePassword = true;
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Row(
+            children: [
+              Icon(Icons.lock, color: Theme.of(context).colorScheme.primary),
+              const SizedBox(width: 8),
+              const Text(
+                'Enter Password',
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'This secret is password protected',
+                style: TextStyle(fontFamily: 'Geist'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: passwordController,
+                obscureText: obscurePassword,
+                autofocus: true,
+                style: const TextStyle(fontFamily: 'Geist'),
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: TextStyle(
+                    fontFamily: 'Geist',
+                    color: Colors.grey.shade400,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscurePassword = !obscurePassword;
+                      });
+                    },
+                  ),
+                ),
+                onSubmitted: (_) =>
+                    _verifyPassword(context, passwordController.text),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () =>
+                  _verifyPassword(context, passwordController.text),
+              child: const Text('Unlock'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _verifyPassword(BuildContext context, String enteredPassword) {
+    if (enteredPassword == secret.password) {
+      Navigator.pop(context); // Close dialog
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SecretDetailScreen(secret: secret),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Incorrect password')));
+    }
   }
 }

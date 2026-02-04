@@ -38,12 +38,20 @@ class AuthProvider with ChangeNotifier {
   }
 
   /// Sign up with email and password
-  Future<bool> signUp({required String email, required String password}) async {
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    String? fullName,
+  }) async {
     _setLoading(true);
     _clearError();
 
     try {
-      await _authService.signUpWithEmail(email: email, password: password);
+      await _authService.signUpWithEmail(
+        email: email,
+        password: password,
+        fullName: fullName,
+      );
       _setLoading(false);
       return true;
     } on FirebaseAuthException catch (e) {

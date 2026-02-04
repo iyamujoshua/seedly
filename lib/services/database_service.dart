@@ -71,26 +71,30 @@ class DatabaseService {
   Stream<List<SecretModel>> getUserSecrets(String userId) {
     return _secretsCollection
         .where('ownerId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
         .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
+        .map((snapshot) {
+          final secrets = snapshot.docs
               .map((doc) => SecretModel.fromFirestore(doc))
-              .toList(),
-        );
+              .toList();
+          // Sort by createdAt descending (client-side to avoid needing index)
+          secrets.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          return secrets;
+        });
   }
 
   /// Get all secrets shared with a user
   Stream<List<SecretModel>> getSharedWithMe(String userId) {
     return _secretsCollection
         .where('sharedWith', arrayContains: userId)
-        .orderBy('createdAt', descending: true)
         .snapshots()
-        .map(
-          (snapshot) => snapshot.docs
+        .map((snapshot) {
+          final secrets = snapshot.docs
               .map((doc) => SecretModel.fromFirestore(doc))
-              .toList(),
-        );
+              .toList();
+          // Sort by createdAt descending (client-side to avoid needing index)
+          secrets.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          return secrets;
+        });
   }
 
   // ==================== SHARING OPERATIONS ====================

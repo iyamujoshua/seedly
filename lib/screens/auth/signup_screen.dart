@@ -4,6 +4,7 @@ import 'package:seedly/components/google_logo.dart';
 import 'package:seedly/components/back_button.dart';
 import 'package:seedly/components/seedly_button.dart';
 import 'package:seedly/providers/auth_provider.dart';
+import 'package:seedly/screens/home/home_screen.dart';
 import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -26,6 +28,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
+    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -33,11 +36,15 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   void _handleSignup() async {
+    final fullName = _fullNameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (fullName.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all fields')),
       );
@@ -59,11 +66,18 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final success = await authProvider.signUp(email: email, password: password);
+    final success = await authProvider.signUp(
+      email: email,
+      password: password,
+      fullName: fullName,
+    );
 
     if (mounted) {
       if (success) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(authProvider.errorMessage ?? 'Signup failed')),
@@ -78,7 +92,10 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (mounted) {
       if (success) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -127,9 +144,26 @@ class _SignupScreenState extends State<SignupScreen> {
 
               const SizedBox(height: 40),
 
+              // Full Name field
+              Text(
+                'Your full name',
+                style: TextStyle(
+                  fontFamily: 'Geist',
+                  fontSize: 14,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildTextField(
+                controller: _fullNameController,
+                hintText: 'Enter your full name',
+              ),
+
+              const SizedBox(height: 24),
+
               // Email field
               Text(
-                'Your number & email address',
+                'Your email address',
                 style: TextStyle(
                   fontFamily: 'Geist',
                   fontSize: 14,

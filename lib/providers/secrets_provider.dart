@@ -2,13 +2,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:seedly/models/secret_model.dart';
 import 'package:seedly/services/database_service.dart';
-import 'package:seedly/services/storage_service.dart';
+// import 'package:seedly/services/storage_service.dart'; // Disabled - requires Blaze plan
 import 'package:uuid/uuid.dart';
 
 /// Provider for managing secrets state
 class SecretsProvider with ChangeNotifier {
   final DatabaseService _databaseService = DatabaseService();
-  final StorageService _storageService = StorageService();
+  // final StorageService _storageService = StorageService(); // Disabled - requires Blaze plan
   final Uuid _uuid = const Uuid();
 
   List<SecretModel> _mySecrets = [];
@@ -68,6 +68,7 @@ class SecretsProvider with ChangeNotifier {
     String? description,
     List<File>? mediaFiles,
     SecretMediaType mediaType = SecretMediaType.none,
+    String? password,
   }) async {
     if (_currentUserId == null) return false;
 
@@ -78,14 +79,15 @@ class SecretsProvider with ChangeNotifier {
       final secretId = _uuid.v4();
       List<String> mediaUrls = [];
 
-      // Upload media files if any
-      if (mediaFiles != null && mediaFiles.isNotEmpty) {
-        mediaUrls = await _storageService.uploadFiles(
-          files: mediaFiles,
-          userId: _currentUserId!,
-          secretId: secretId,
-        );
-      }
+      // Skip media upload for now - Firebase Storage requires Blaze plan
+      // TODO: Re-enable when storage is available
+      // if (mediaFiles != null && mediaFiles.isNotEmpty) {
+      //   mediaUrls = await _storageService.uploadFiles(
+      //     files: mediaFiles,
+      //     userId: _currentUserId!,
+      //     secretId: secretId,
+      //   );
+      // }
 
       // Create secret
       final secret = SecretModel.create(
@@ -94,7 +96,8 @@ class SecretsProvider with ChangeNotifier {
         title: title,
         description: description,
         mediaUrls: mediaUrls,
-        mediaType: mediaType,
+        mediaType: SecretMediaType.none, // Force text-only for now
+        password: password,
       );
 
       await _databaseService.createSecret(secret);
@@ -117,11 +120,12 @@ class SecretsProvider with ChangeNotifier {
     _clearError();
 
     try {
-      // Delete media files
-      await _storageService.deleteSecretFiles(
-        userId: _currentUserId!,
-        secretId: secret.id,
-      );
+      // Skip media deletion - Firebase Storage requires Blaze plan
+      // TODO: Re-enable when storage is available
+      // await _storageService.deleteSecretFiles(
+      //   userId: _currentUserId!,
+      //   secretId: secret.id,
+      // );
 
       // Delete secret document
       await _databaseService.deleteSecret(secret.id);

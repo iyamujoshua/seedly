@@ -12,6 +12,8 @@ class SecretModel {
   final List<String> mediaUrls;
   final SecretMediaType mediaType;
   final List<String> sharedWith;
+  final String?
+  password; // Password protection (stored as plain text for simplicity, consider hashing in production)
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -23,9 +25,12 @@ class SecretModel {
     this.mediaUrls = const [],
     this.mediaType = SecretMediaType.none,
     this.sharedWith = const [],
+    this.password,
     required this.createdAt,
     required this.updatedAt,
   });
+
+  bool get isPasswordProtected => password != null && password!.isNotEmpty;
 
   /// Create a new secret
   factory SecretModel.create({
@@ -35,6 +40,7 @@ class SecretModel {
     String? description,
     List<String> mediaUrls = const [],
     SecretMediaType mediaType = SecretMediaType.none,
+    String? password,
   }) {
     final now = DateTime.now();
     return SecretModel(
@@ -45,6 +51,7 @@ class SecretModel {
       mediaUrls: mediaUrls,
       mediaType: mediaType,
       sharedWith: [],
+      password: password,
       createdAt: now,
       updatedAt: now,
     );
@@ -61,6 +68,7 @@ class SecretModel {
       mediaUrls: List<String>.from(data['mediaUrls'] ?? []),
       mediaType: _parseMediaType(data['mediaType']),
       sharedWith: List<String>.from(data['sharedWith'] ?? []),
+      password: data['password'],
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (data['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -75,6 +83,7 @@ class SecretModel {
       'mediaUrls': mediaUrls,
       'mediaType': mediaType.name,
       'sharedWith': sharedWith,
+      'password': password,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
     };
@@ -87,6 +96,7 @@ class SecretModel {
     List<String>? mediaUrls,
     SecretMediaType? mediaType,
     List<String>? sharedWith,
+    String? password,
   }) {
     return SecretModel(
       id: id,
@@ -96,6 +106,7 @@ class SecretModel {
       mediaUrls: mediaUrls ?? this.mediaUrls,
       mediaType: mediaType ?? this.mediaType,
       sharedWith: sharedWith ?? this.sharedWith,
+      password: password ?? this.password,
       createdAt: createdAt,
       updatedAt: DateTime.now(),
     );

@@ -4,6 +4,7 @@ import 'package:seedly/components/google_logo.dart';
 import 'package:seedly/components/back_button.dart';
 import 'package:seedly/components/seedly_button.dart';
 import 'package:seedly/providers/auth_provider.dart';
+import 'package:seedly/screens/home/home_screen.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -46,8 +47,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mounted) {
       if (success) {
-        // Navigate to home screen (will be created later)
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigate to home screen and clear navigation stack
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(authProvider.errorMessage ?? 'Login failed')),
@@ -62,7 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mounted) {
       if (success) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

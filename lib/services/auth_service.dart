@@ -30,11 +30,20 @@ class AuthService {
   Future<UserCredential> signUpWithEmail({
     required String email,
     required String password,
+    String? fullName,
   }) async {
-    return await _auth.createUserWithEmailAndPassword(
+    final credential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
+
+    // Update display name if provided
+    if (fullName != null && fullName.isNotEmpty) {
+      await credential.user?.updateDisplayName(fullName);
+      await credential.user?.reload();
+    }
+
+    return credential;
   }
 
   /// Sign in with Google

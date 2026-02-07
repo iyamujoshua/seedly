@@ -6,6 +6,7 @@ class UserModel {
   final String email;
   final String? displayName;
   final String? photoURL;
+  final String? avatarId;
   final DateTime createdAt;
 
   UserModel({
@@ -13,6 +14,7 @@ class UserModel {
     required this.email,
     this.displayName,
     this.photoURL,
+    this.avatarId,
     required this.createdAt,
   });
 
@@ -40,6 +42,7 @@ class UserModel {
       email: data['email'] ?? '',
       displayName: data['displayName'],
       photoURL: data['photoURL'],
+      avatarId: data['avatarId'],
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
@@ -50,17 +53,23 @@ class UserModel {
       'email': email,
       'displayName': displayName,
       'photoURL': photoURL,
+      'avatarId': avatarId,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 
   /// Copy with new values
-  UserModel copyWith({String? displayName, String? photoURL}) {
+  UserModel copyWith({
+    String? displayName,
+    String? photoURL,
+    String? avatarId,
+  }) {
     return UserModel(
       uid: uid,
       email: email,
       displayName: displayName ?? this.displayName,
       photoURL: photoURL ?? this.photoURL,
+      avatarId: avatarId ?? this.avatarId,
       createdAt: createdAt,
     );
   }

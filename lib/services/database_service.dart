@@ -114,4 +114,13 @@ class DatabaseService {
       'updatedAt': Timestamp.now(),
     });
   }
+
+  // ==================== USER AVATAR OPERATIONS ====================
+
+  /// Update user's avatar selection
+  Future<void> updateUserAvatar(String uid, String avatarId) async {
+    await _usersCollection.doc(uid).set({
+      'avatarId': avatarId,
+    }, SetOptions(merge: true));
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:seedly/services/auth_service.dart';
+import 'package:seedly/services/database_service.dart';
 
 /// Authentication state provider for managing user authentication
 class AuthProvider with ChangeNotifier {
@@ -111,10 +112,46 @@ class AuthProvider with ChangeNotifier {
 
     try {
       await _authService.signOut();
+      _userAvatarId = null;
       _setLoading(false);
     } catch (e) {
       _errorMessage = 'Failed to sign out. Please try again.';
       _setLoading(false);
+    }
+  }
+
+  // Avatar management
+  String? _userAvatarId;
+  String? get userAvatarId => _userAvatarId;
+
+  /// Set avatar ID (called when fetching user data)
+  void setAvatarId(String? avatarId) {
+    _userAvatarId = avatarId;
+    notifyListeners();
+  }
+
+  /// Update user's avatar selection
+  Future<bool> updateAvatar(String avatarId) async {
+    if (currentUser == null) {
+      debugPrint('updateAvatar: No current user');
+      return false;
+    }
+
+    try {
+      debugPrint(
+        'updateAvatar: Updating avatar to $avatarId for user ${currentUser!.uid}',
+      );
+      final DatabaseService db = DatabaseService();
+      await db.updateUserAvatar(currentUser!.uid, avatarId);
+      _userAvatarId = avatarId;
+      debugPrint('updateAvatar: Success! Avatar updated to $avatarId');
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint('updateAvatar: Error - $e');
+      _errorMessage = 'Failed to update avatar. Please try again.';
+      notifyListeners();
+      return false;
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:seedly/providers/secrets_provider.dart';
 import 'package:seedly/screens/secrets/secrets_list_screen.dart';
 import 'package:seedly/screens/secrets/shared_secrets_screen.dart';
 import 'package:seedly/screens/secrets/create_secret_screen.dart';
+import 'package:seedly/screens/profile/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const SecretsListScreen(),
     const SharedSecretsScreen(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -81,7 +83,12 @@ class _HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.people_outline),
               activeIcon: Icon(Icons.people),
-              label: 'Shared with Me',
+              label: 'Shared',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: 'Profile',
             ),
           ],
         ),

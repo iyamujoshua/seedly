@@ -5,6 +5,7 @@ import 'package:seedly/providers/secrets_provider.dart';
 import 'package:seedly/providers/auth_provider.dart';
 import 'package:seedly/screens/secrets/secret_detail_screen.dart';
 import 'package:seedly/screens/onboarding_screen.dart';
+import 'package:seedly/components/avatar_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class SecretsListScreen extends StatelessWidget {
@@ -24,6 +25,15 @@ class SecretsListScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        leadingWidth: 64,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: AvatarWidget(
+            avatarId: authProvider.userAvatarId,
+            size: 40,
+            showBorder: false,
+          ),
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
